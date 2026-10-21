@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllSeasons, getSeason } from '../../lib/episodes';
+import { withBase } from '../../lib/base';
+
+export function getStaticPaths() {
+  const seasons = getAllSeasons();
+  return seasons.map((s) => ({
+    params: { season: s.slug },
+  }));
+}
+
+const { season } = Astro.params;
+const seasonData = getSeason(season as string);
+
+if (!seasonData) {
+  throw new Error(`Season not found: ${season}`);
+}
+---
+
+<Layout
+  title={`${seasonData.title} (Season ${seasonData.number})`}
+  description={seasonData.description}
+  activeNav={seasonData.slug}
+>
+  <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+    <!-- Breadcrumb -->
+    <nav style="display: flex; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px;">
+      <a href={withBase('/')} style="color: var(--text-muted);">Home</a>
+      <span>/</span>
+      <span>Seasons</span>
+      <span>/</span>
+      <span style="color: var(--text-primary);">{seasonData.title}</span>
+    </nav>
+
+    <!-- Season Hero Banner -->
+    <div
+      style={`background: linear-gradient(135deg, rgba(16, 22, 35, 0.9) 0%, rgba(9, 11, 16, 0.95) 100%); border: 1px solid var(--border-subtle); border-left: 4px solid ${seasonData.color}; border-radius: 16px; padding: 40px; margin-bottom: 50px;`}
+    >
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <span class="meta-pill season" style={`color: ${seasonData.accent}`}>Season {seasonData.number}</span>
+        <span style="font-size: 1.4rem;">{seasonData.icon}</span>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">&middot; {seasonData.episodeCount} Episodes</span>
+      </div>
+
+      <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; color: #fff; margin-bottom: 12px;">
+        {seasonData.title}
+      </h1>
+
+      <p style={`font-size: 1.2rem; color: ${seasonData.accent}; font-weight: 600; margin-bottom: 16px;`}>
+        {seasonData.tagline}
+      </p>
+
+      <p style="max-width: 820px; font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">
+        {seasonData.description}
+      </p>
+    </div>
+
+    <!-- Episodes Grid -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: #fff;">
+          All Episodes in Season {seasonData.number}
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">
+          Episodes {seasonData.episodes[0]?.epNum} to {seasonData.episodes[seasonData.episodes.length - 1]?.epNum}
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+        {seasonData.episodes.map((ep) => (
+          <a
+            href={withBase(`/episodes/${ep.seasonSlug}/${ep.slug}`)}
+            style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; text-decoration: none; transition: all 0.25s ease;"
+          >
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="meta-pill" style="font-size: 0.72rem;">Ep {ep.epNum}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">{ep.years || `${ep.readingMinutes} min read`}</span>
+            </div>
+
+            <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3;">
+              {ep.cleanTitle}
+            </h3>
+
+            <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 16px; line-height: 1.5; flex-grow: 1;">
+              {ep.logline}
+            </p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border-subtle); font-size: 0.8rem;">
+              <span style="color: var(--text-muted); font-size: 0.75rem;">
+                {ep.wordCount.toLocaleString()} words &middot; {ep.readingMinutes} min
+              </span>
+              <span style="color: var(--gold-primary); font-weight: 600;">
+                Read Treatment &rarr;
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

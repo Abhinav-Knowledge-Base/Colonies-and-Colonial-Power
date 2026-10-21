@@ -1,0 +1,13 @@
+# Node / Website
+website/node_modules/
+website/dist/
+website/.astro/
+website/npm-debug.log*
+
+# OS / System
+.DS_Store
+Thumbs.db
+
+# IDE / Editors
+.vscode/
+.idea/

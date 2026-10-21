@@ -1,0 +1,53 @@
+---
+import { withBase } from '../lib/base';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <span style="font-size: 1.5rem;">🧭</span>
+          <h4 style="margin-bottom: 0; font-size: 1.1rem; color: #fff;">Colonies and Colonial Power</h4>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 480px; margin-bottom: 16px;">
+          How a few powers remade the map — and how the colonized remade the ending. A rigorous 72-episode documentary architecture tracking systems, archives, institutions, resistance, and unfinished decolonization.
+        </p>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+          Part of the Abhinav Knowledge Base documentary series.
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Architecture</h4>
+        <ul>
+          <li><a href={withBase('/#seasons')}>All 9 Seasons</a></li>
+          <li><a href={withBase('/paths')}>Viewing Paths & Samplers</a></li>
+          <li><a href={withBase('/matrix')}>Comparative Matrix</a></li>
+          <li><a href={withBase('/guide')}>Production Guide</a></li>
+          <li><a href={withBase('/sources')}>Source Catalog</a></li>
+          <li><a href={withBase('/factcheck')}>Rights & Factcheck</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Companion Projects</h4>
+        <ul>
+          <li><a href="https://abhinav-knowledge-base.github.io/The-Scientific-Story-of-Everything/" target="_blank" rel="noopener noreferrer">The Story of Everything &rarr;</a></li>
+          <li><a href="https://abhinav-knowledge-base.github.io/Cradles-of-Civilization/" target="_blank" rel="noopener noreferrer">Cradles of Civilization &rarr;</a></li>
+          <li><a href="https://abhinav-knowledge-base.github.io/Discovery-of-India/" target="_blank" rel="noopener noreferrer">Discovery of India &rarr;</a></li>
+          <li><a href="https://github.com/Abhinav-Knowledge-Base/Colonies-and-Colonial-Power" target="_blank" rel="noopener noreferrer">GitHub Repository &rarr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        &copy; {new Date().getFullYear()} Colonies and Colonial Power &middot; Open Research &amp; Documentary Archive.
+      </div>
+      <div>
+        Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem;">Ctrl K</kbd> to search anytime.
+      </div>
+    </div>
+  </div>
+</footer>

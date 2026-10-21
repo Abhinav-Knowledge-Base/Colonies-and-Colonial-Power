@@ -1,0 +1,67 @@
+---
+import { withBase } from '../lib/base';
+
+interface Props {
+  activeNav?: string;
+}
+
+const { activeNav = '' } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href={withBase('/')} class="brand-link">
+      <span class="brand-logo-icon">🧭</span>
+      <div class="brand-text">
+        <span class="brand-title">Colonies & Colonial Power</span>
+        <span class="brand-tagline">72 Episodes &middot; The Colonial Age</span>
+      </div>
+    </a>
+
+    <nav aria-label="Main Navigation">
+      <ul class="nav-links">
+        <li>
+          <a href={withBase('/#seasons')} class:list={['nav-link', { active: activeNav.startsWith('season-') }]}>
+            Seasons (1–9)
+          </a>
+        </li>
+        <li>
+          <a href={withBase('/paths')} class:list={['nav-link', { active: activeNav === 'paths' }]}>
+            Viewing Paths
+          </a>
+        </li>
+        <li>
+          <a href={withBase('/matrix')} class:list={['nav-link', { active: activeNav === 'matrix' }]}>
+            Comparative Matrix
+          </a>
+        </li>
+        <li>
+          <a href={withBase('/guide')} class:list={['nav-link', { active: activeNav === 'guide' }]}>
+            Handbook
+          </a>
+        </li>
+        <li>
+          <a href={withBase('/sources')} class:list={['nav-link', { active: activeNav === 'sources' }]}>
+            Sources
+          </a>
+        </li>
+        <li>
+          <a href={withBase('/factcheck')} class:list={['nav-link', { active: activeNav === 'factcheck' }]}>
+            Factcheck
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button id="search-open-btn" class="search-trigger-btn" aria-label="Search Episodes">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Search</span>
+        <kbd class="search-kbd">Ctrl K</kbd>
+      </button>
+    </div>
+  </div>
+</header>

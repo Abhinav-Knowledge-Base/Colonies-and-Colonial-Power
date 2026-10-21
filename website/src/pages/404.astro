@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../lib/base';
+---
+
+<Layout title="404 — Record Not Found">
+  <div class="container" style="padding: 100px 24px; text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: 16px;">🧭</div>
+    <h1 style="font-family: var(--font-display); font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 16px;">
+      Record Not Found
+    </h1>
+    <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px; line-height: 1.6;">
+      The archive does not contain the page or episode you requested.
+    </p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href={withBase('/')} class="btn-primary">Return to Overview</a>
+      <a href={withBase('/#seasons')} class="btn-secondary">Browse All 9 Seasons</a>
+    </div>
+  </div>
+</Layout>

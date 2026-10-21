@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAllSeasons, getAllEpisodes } from '../lib/episodes';
+import { withBase } from '../lib/base';
+
+const seasons = getAllSeasons();
+const allEpisodes = getAllEpisodes();
+
+// 8 sampler episodes from SEASONS_AND_PATHS.md
+const samplerEpNums = [1, 7, 12, 25, 38, 52, 69, 72];
+const samplerEpisodes = samplerEpNums
+  .map((num) => allEpisodes.find((e) => e.epNum === num))
+  .filter(Boolean);
+---
+
+<Layout
+  title="Colonies and Colonial Power — The Colonial Age"
+  description="How a few powers remade the map — and how the colonized remade the ending. 72 documentary episodes across 9 seasons."
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        <span>Complete 72-Episode Archival Architecture</span>
+      </div>
+
+      <h1 class="hero-title">Colonies &amp; Colonial Power</h1>
+      <p class="hero-subtitle">The Colonial Age</p>
+
+      <p class="hero-description">
+        Colonial power was a world system — ships, companies, plantations, missions, law, and guns — not a series of heroic voyages. 
+        It remade maps, labor, and ecologies, and was met by survival, adaptation, revolt, and an ending that stays unfinished.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href={withBase('/episodes/season-01/ep-01-what-the-word-colony-did')} class="btn-primary">
+          <span>Start Episode 1: What the Word Colony Did</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href={withBase('/paths')} class="btn-secondary">
+          <span>Viewing Paths &amp; Samplers</span>
+        </a>
+        <a href="#seasons" class="btn-secondary">
+          <span>Browse 9 Seasons</span>
+        </a>
+      </div>
+
+      <!-- Stat Ticker -->
+      <div class="stat-ticker-grid">
+        <div class="stat-item">
+          <div class="stat-value">72</div>
+          <div class="stat-label">Documentary Episodes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">9</div>
+          <div class="stat-label">Thematic Seasons</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">500+ Yrs</div>
+          <div class="stat-label">Global Span Analyzed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">0%</div>
+          <div class="stat-label">Imperial Nostalgia</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Thesis Callout -->
+  <section class="container" style="margin-bottom: 60px;">
+    <div style="background: linear-gradient(135deg, rgba(20, 26, 40, 0.9) 0%, rgba(10, 13, 20, 0.95) 100%); border: 1px solid var(--border-active); border-radius: 16px; padding: 36px 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span style="font-size: 1.6rem;">⚖️</span>
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: #fff;">
+          The Series Premise &amp; Honesty Rules
+        </h2>
+      </div>
+      <p style="font-family: var(--font-prose); font-size: 1.15rem; color: #e2e8f0; line-height: 1.8; margin-bottom: 16px;">
+        The series carries no imperial nostalgia. It never claims colonialism as pure progress, and never claims colonized peoples were only victims. It moves by system, by empire, by the Atlantic machine, and by region, then closes on freedom struggles and what remained.
+      </p>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.88rem; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+        <a href={withBase('/paths')} style="color: var(--gold-primary); font-weight: 600;">Explore Curated Syllabi &rarr;</a>
+        <a href={withBase('/matrix')} style="color: var(--cyan-primary); font-weight: 600;">Comparative Matrix &rarr;</a>
+        <a href={withBase('/factcheck')} style="color: var(--text-secondary);">Honesty &amp; Clearance Rules &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- The 8-Episode Sampler -->
+  <section class="container" style="margin-bottom: 70px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">
+          Curated Introduction
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: #fff;">
+          The Eight-Hour Sampler
+        </h2>
+      </div>
+      <a href={withBase('/paths')} style="font-size: 0.88rem; font-weight: 600;">View All Paths &rarr;</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+      {samplerEpisodes.map((ep) => ep && (
+        <a
+          href={withBase(`/episodes/${ep.seasonSlug}/${ep.slug}`)}
+          style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; text-decoration: none; transition: all 0.25s ease;"
+        >
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="meta-pill season">Ep {ep.epNum}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">{ep.years || ep.seasonBadge}</span>
+          </div>
+          <h3 style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3;">
+            {ep.cleanTitle}
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; flex-grow: 1; margin-bottom: 14px;">
+            {ep.logline.slice(0, 110)}...
+          </p>
+          <div style="font-size: 0.8rem; color: var(--gold-primary); font-weight: 600; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
+            Read Treatment &rarr;
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- All 9 Seasons -->
+  <section id="seasons" class="container" style="margin-bottom: 80px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h2 style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 12px;">
+        The Nine Seasons of Colonial Power
+      </h2>
+      <p style="max-width: 650px; margin: 0 auto; font-size: 1rem; color: var(--text-secondary);">
+        Seventy-two episodes organized into nine 8-episode arcs from systemic foundations to modern afterlives.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+      {seasons.map((s) => (
+        <div
+          style={`background: var(--bg-card); border: 1px solid var(--border-subtle); border-left: 4px solid ${s.color}; border-radius: 12px; padding: 28px; display: flex; flex-direction: column;`}
+        >
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.4rem;">{s.icon}</span>
+              <span style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold-primary);">
+                Season {s.number}
+              </span>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">
+              {s.episodeCount} Episodes
+            </span>
+          </div>
+
+          <h3 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+            {s.title}
+          </h3>
+
+          <div style={`font-size: 0.88rem; color: ${s.accent}; font-weight: 500; margin-bottom: 12px;`}>
+            {s.tagline}
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; flex-grow: 1;">
+            {s.description}
+          </p>
+
+          <a
+            href={withBase(`/seasons/${s.slug}`)}
+            class="btn-secondary"
+            style="justify-content: center; font-size: 0.88rem; padding: 10px;"
+          >
+            Explore Season {s.number} Episodes ({s.episodes[0]?.epNum}–{s.episodes[s.episodes.length - 1]?.epNum}) &rarr;
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

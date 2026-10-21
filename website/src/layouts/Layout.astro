@@ -1,0 +1,53 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchModal from '../components/SearchModal.astro';
+import { withBase } from '../lib/base';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activeNav?: string;
+}
+
+const {
+  title = 'Colonies and Colonial Power — The Colonial Age',
+  description = 'How a few powers remade the map — and how the colonized remade the ending. 72 documentary episodes exploring colonial systems, institutions, and decolonization.',
+  activeNav = '',
+} = Astro.props;
+
+const pageTitle = title.includes('Colonies and Colonial Power') ? title : `${title} | Colonies & Colonial Power`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Colonies and Colonial Power" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+
+    <!-- Offline KaTeX Mathematical Styling -->
+    <link rel="stylesheet" href={withBase('/katex/katex.min.css')} />
+  </head>
+  <body>
+    <Header activeNav={activeNav} />
+    <main style="flex: 1;">
+      <slot />
+    </main>
+    <Footer />
+    <SearchModal />
+  </body>
+</html>

@@ -1,0 +1,133 @@
+---
+import { getAllEpisodes } from '../lib/episodes';
+import { withBase } from '../lib/base';
+
+const episodes = getAllEpisodes().map((e) => ({
+  id: e.id,
+  title: e.title,
+  season: e.seasonTitle,
+  seasonSlug: e.seasonSlug,
+  slug: e.slug,
+  epNum: e.epNum,
+  years: e.years,
+  logline: e.logline,
+  url: withBase(`/episodes/${e.seasonSlug}/${e.slug}`),
+}));
+---
+
+<div id="search-modal" class="search-modal-backdrop" aria-hidden="true">
+  <div class="search-modal-panel">
+    <div class="search-input-wrapper">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search all 72 episodes (e.g. VOC, Potosí, Haiti, Berlin, Bandung, Mita)..."
+        autocomplete="off"
+      />
+      <kbd class="search-kbd" id="search-close-btn" style="cursor: pointer;">ESC</kbd>
+    </div>
+
+    <div id="search-results" class="search-results-list">
+      <div style="padding: 16px; color: var(--text-muted); text-align: center; font-size: 0.9rem;">
+        Type keywords to search episodes, empires, treaties, and resistance movements.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ episodes }}>
+  const modal = document.getElementById('search-modal');
+  const input = document.getElementById('search-input');
+  const resultsContainer = document.getElementById('search-results');
+  const openBtn = document.getElementById('search-open-btn');
+  const closeBtn = document.getElementById('search-close-btn');
+
+  function openSearch() {
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => input?.focus(), 50);
+  }
+
+  function closeSearch() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (input) input.value = '';
+    renderResults([]);
+  }
+
+  openBtn?.addEventListener('click', openSearch);
+  closeBtn?.addEventListener('click', closeSearch);
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeSearch();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      modal?.classList.contains('open') ? closeSearch() : openSearch();
+    }
+    if (e.key === 'Escape' && modal?.classList.contains('open')) {
+      closeSearch();
+    }
+  });
+
+  function renderResults(matches) {
+    if (!resultsContainer) return;
+
+    if (!input?.value.trim()) {
+      resultsContainer.innerHTML = `
+        <div style="padding: 16px; color: var(--text-muted); text-align: center; font-size: 0.9rem;">
+          Type keywords to search episodes, empires, treaties, and resistance movements.
+        </div>`;
+      return;
+    }
+
+    if (matches.length === 0) {
+      resultsContainer.innerHTML = `
+        <div style="padding: 24px; color: var(--text-muted); text-align: center; font-size: 0.9rem;">
+          No matching episodes found. Try searching for "silver", "treaty", "slave trade", or "charter".
+        </div>`;
+      return;
+    }
+
+    resultsContainer.innerHTML = matches
+      .slice(0, 10)
+      .map(
+        (m) => `
+      <a href="${m.url}" class="search-result-item">
+        <div class="search-result-title">${m.title} ${m.years ? `<span style="font-size: 0.8rem; font-weight: normal; color: var(--gold-primary);">(${m.years})</span>` : ''}</div>
+        <div class="search-result-sub">${m.season} &middot; <span style="font-style: italic;">${m.logline.slice(0, 100)}...</span></div>
+      </a>
+    `
+      )
+      .join('');
+  }
+
+  input?.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    if (!q) {
+      renderResults([]);
+      return;
+    }
+
+    const matches = episodes.filter((ep) => {
+      return (
+        ep.title.toLowerCase().includes(q) ||
+        ep.logline.toLowerCase().includes(q) ||
+        ep.years.toLowerCase().includes(q) ||
+        ep.slug.toLowerCase().includes(q) ||
+        ep.season.toLowerCase().includes(q)
+      );
+    });
+
+    renderResults(matches);
+  });
+</script>

@@ -1,0 +1,221 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getAllEpisodes, getEpisode } from '../../../lib/episodes';
+import { parseMarkdown } from '../../../lib/markdown';
+import { withBase } from '../../../lib/base';
+
+export function getStaticPaths() {
+  const episodes = getAllEpisodes();
+  return episodes.map((ep) => ({
+    params: {
+      season: ep.seasonSlug,
+      slug: ep.slug,
+    },
+  }));
+}
+
+const { season, slug } = Astro.params;
+const episode = getEpisode(season as string, slug as string);
+
+if (!episode) {
+  throw new Error(`Episode not found: ${season}/${slug}`);
+}
+
+const { html, toc } = parseMarkdown(episode.raw);
+---
+
+<Layout
+  title={`${episode.title} — ${episode.seasonTitle}`}
+  description={`${episode.title}: ${episode.logline}`}
+  activeNav={episode.seasonSlug}
+>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress-bar">
+    <div id="progress-fill" class="reading-progress-fill"></div>
+  </div>
+
+  <div class="container">
+    <div class="reader-layout">
+      <!-- Main Reader Column -->
+      <article class="reader-main">
+        <!-- Breadcrumb -->
+        <nav style="display: flex; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; flex-wrap: wrap;">
+          <a href={withBase('/')} style="color: var(--text-muted);">Home</a>
+          <span>/</span>
+          <a href={withBase(`/seasons/${episode.seasonSlug}`)} style="color: var(--text-muted);">{episode.seasonTitle}</a>
+          <span>/</span>
+          <span style="color: var(--text-primary);">Ep {episode.epNum}</span>
+        </nav>
+
+        <!-- Chapter Header -->
+        <header class="chapter-header">
+          <div class="chapter-meta-pills">
+            <span class="meta-pill season">{episode.seasonBadge} &middot; Ep {episode.epNum}</span>
+            {episode.years && (
+              <span class="meta-pill" style="border-color: rgba(212, 163, 89, 0.4); color: var(--gold-primary); font-family: var(--font-mono);">
+                {episode.years}
+              </span>
+            )}
+            <span class="meta-pill">{episode.readingMinutes} min read ({episode.wordCount.toLocaleString()} words)</span>
+          </div>
+
+          <h1 class="chapter-title">{episode.title}</h1>
+
+          <!-- Logline Card -->
+          <div class="chapter-core-question">
+            <span class="question-icon">⚖️</span>
+            <div>
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-primary); font-weight: 700; margin-bottom: 4px;">
+                Documentary Logline
+              </div>
+              <div class="question-text">{episode.logline}</div>
+            </div>
+          </div>
+
+          <!-- Quick Navigation Bar -->
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px 18px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 0.8rem;">
+              <span style="color: var(--text-muted);">Companion:</span>
+              <a href={withBase('/paths')} style="color: var(--gold-primary);">Viewing Paths</a>
+              <span style="color: var(--border-subtle);">&middot;</span>
+              <a href={withBase('/matrix')} style="color: var(--cyan-primary);">Comparative Matrix</a>
+              <span style="color: var(--border-subtle);">&middot;</span>
+              <a href={withBase('/sources')} style="color: var(--cyan-primary);">Source Catalog</a>
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: center;">
+              {episode.prevEpisode && (
+                <a
+                  href={withBase(`/episodes/${episode.prevEpisode.seasonSlug}/${episode.prevEpisode.slug}`)}
+                  style="font-size: 0.8rem; color: var(--text-secondary);"
+                  title={episode.prevEpisode.title}
+                >
+                  &larr; Ep {episode.prevEpisode.epNum}
+                </a>
+              )}
+              {episode.prevEpisode && episode.nextEpisode && <span style="color: var(--border-subtle);">&middot;</span>}
+              {episode.nextEpisode && (
+                <a
+                  href={withBase(`/episodes/${episode.nextEpisode.seasonSlug}/${episode.nextEpisode.slug}`)}
+                  style="font-size: 0.8rem; color: var(--gold-primary); font-weight: 600;"
+                  title={episode.nextEpisode.title}
+                >
+                  Ep {episode.nextEpisode.epNum} &rarr;
+                </a>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <!-- Substantive Narrative Body (KaTeX math & markdown) -->
+        <div class="prose-body" set:html={html} />
+
+        <!-- Baton Handoff Gateway to Next Episode -->
+        {episode.nextEpisode && (
+          <div class="baton-gateway-card">
+            <span class="baton-label">
+              <span>✦</span> Next in the Sequence
+            </span>
+            <div class="baton-title">{episode.nextEpisode.title}</div>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
+              Continue exploring the world system and archival evidence in the next episode.
+            </p>
+
+            <div class="baton-nav-controls">
+              {episode.prevEpisode ? (
+                <a
+                  href={withBase(`/episodes/${episode.prevEpisode.seasonSlug}/${episode.prevEpisode.slug}`)}
+                  class="btn-secondary"
+                  style="font-size: 0.9rem; padding: 10px 18px;"
+                >
+                  &larr; Previous: Ep {episode.prevEpisode.epNum}
+                </a>
+              ) : <div />}
+
+              <a
+                href={withBase(`/episodes/${episode.nextEpisode.seasonSlug}/${episode.nextEpisode.slug}`)}
+                class="btn-primary"
+                style="font-size: 0.95rem; padding: 12px 24px;"
+              >
+                <span>Read Episode {episode.nextEpisode.epNum} &rarr;</span>
+              </a>
+            </div>
+          </div>
+        )}
+      </article>
+
+      <!-- Sticky Sidebar Table of Contents -->
+      <aside class="reader-sidebar">
+        <div class="toc-card">
+          <h2 class="toc-title">Contents</h2>
+          {toc.length > 0 ? (
+            <ul class="toc-list">
+              {toc.map((item) => (
+                <li>
+                  <a
+                    href={`#${item.id}`}
+                    class:list={['toc-link', { 'level-3': item.level === 3 }]}
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style="font-size: 0.8rem; color: var(--text-muted);">
+              Full documentary treatment.
+            </p>
+          )}
+
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem;">
+            <a href={withBase(`/seasons/${episode.seasonSlug}`)} style="color: var(--text-secondary);">
+              &larr; Back to {episode.seasonTitle}
+            </a>
+            <a href={withBase('/paths')} style="color: var(--text-secondary);">
+              &bull; View Viewing Paths
+            </a>
+            <a href={withBase('/matrix')} style="color: var(--text-secondary);">
+              &bull; Comparative Matrix
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Reading Progress Bar
+  const fill = document.getElementById('progress-fill');
+  window.addEventListener('scroll', () => {
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (totalHeight > 0 && fill) {
+      const progress = (window.scrollY / totalHeight) * 100;
+      fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }
+  });
+
+  // Table of Contents Active Highlighting
+  const headings = document.querySelectorAll('.content-heading');
+  const tocLinks = document.querySelectorAll('.toc-link');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach((link) => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    },
+    { rootMargin: '-80px 0px -70% 0px' }
+  );
+
+  headings.forEach((h) => observer.observe(h));
+</script>

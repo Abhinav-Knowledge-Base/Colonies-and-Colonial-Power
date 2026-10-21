@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getMatrixRaw } from '../lib/episodes';
+import { parseMarkdown } from '../lib/markdown';
+import { withBase } from '../lib/base';
+
+const raw = getMatrixRaw();
+const { html, toc } = parseMarkdown(raw);
+---
+
+<Layout
+  title="Comparative Matrix — Colonies and Colonial Power"
+  description="Comparative criteria across empires: legal claim, chartered companies, labor regimes, race & caste, resistance forms, and decolonization models."
+  activeNav="matrix"
+>
+  <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+    <!-- Breadcrumb -->
+    <nav style="display: flex; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px;">
+      <a href={withBase('/')} style="color: var(--text-muted);">Home</a>
+      <span>/</span>
+      <span style="color: var(--text-primary);">Comparative Matrix</span>
+    </nav>
+
+    <!-- Header Banner -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-left: 4px solid var(--cyan-primary); border-radius: 16px; padding: 40px; margin-bottom: 40px;">
+      <div class="hero-badge" style="margin-bottom: 16px;">
+        <span>Analytical Framework</span>
+      </div>
+      <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #fff; margin-bottom: 12px;">
+        Comparative Matrix
+      </h1>
+      <p style="font-size: 1.1rem; color: var(--gold-primary); font-family: var(--font-display); font-weight: 600; margin-bottom: 16px;">
+        Institutions, Extraction Models, and Legal Regimes Compared
+      </p>
+      <p style="max-width: 800px; font-size: 1rem; color: var(--text-secondary); line-height: 1.7;">
+        The series refuses morality contests ("which empire was milder") and instead directly compares legal charters, fiscal mechanics, coerced labor systems, racial hierarchies, and decolonization transitions.
+      </p>
+    </div>
+
+    <!-- Content Layout -->
+    <div class="reader-layout" style="padding-top: 0;">
+      <article class="reader-main prose-body" set:html={html} />
+
+      <aside class="reader-sidebar">
+        <div class="toc-card">
+          <h2 class="toc-title">Matrix Criteria</h2>
+          {toc.length > 0 && (
+            <ul class="toc-list">
+              {toc.map((item) => (
+                <li>
+                  <a href={`#${item.id}`} class:list={['toc-link', { 'level-3': item.level === 3 }]}>
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
