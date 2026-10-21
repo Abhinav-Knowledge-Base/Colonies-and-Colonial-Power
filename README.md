@@ -2,6 +2,11 @@
 
 *Also called:* **The Colonial Age**
 
+**Live Website:** [https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/](https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/)  
+**Featured Episode (Season 5, Ep. 38 — Haiti):** [https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/episodes/5/38-haiti/](https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/episodes/5/38-haiti/)  
+**Curated Viewing Paths:** [https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/paths/](https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/paths/)  
+**Comparative Matrix:** [https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/matrix/](https://abhinav-knowledge-base.github.io/Colonies-and-Colonial-Power/matrix/)
+
 Complete series documentation. One file per episode. Seventy-two episodes.
 
 This folder is only this series. *Discovery of India*, *Cradles of Civilization*, *600–500 BCE*, and *The Last Five Hundred Years* are separate projects, with their own episode counts, honesty rules, and archives. None of them is a season of this series, and this series is not a season, preface, or sequel of any of them. *Discovery of India* owns the long political and social history of the subcontinent, including Company rule, 1857, mass nationalism, Partition, and the republic. This series films the Raj once, as one system inside a world empire (Episode 21), and stops, and repeats the handoff in Episode 62. It does not narrate Gandhi’s life, the Constituent Assembly, or Partition’s regional history. *Cradles of Civilization* owns the origins of cities, states, and writing. The Mexica, the Inca, Kongo, and every other state here appear as societies already in history when Europeans arrived, never as a “cradle.” *600–500 BCE* is a different series with no shared plot. *The Last Five Hundred Years* is the history of instruments and of nature answering back from the 16th century. Botanical gardens, surveys, quinine, and censuses appear here only as tools of rule, not as a science series.
